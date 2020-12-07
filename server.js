@@ -24,7 +24,7 @@ app.use(errorHandler);
 
 //callback functions
 function renderHome(req,res){
-  res.status(200).send('Hello!');
+  res.status(200).send('Hello World');
 }
 
 function renderData(req,res,next){
@@ -37,6 +37,11 @@ function renderData(req,res,next){
 }
 
 //turning the server on
-app.listen(PORT, () => {
-  console.log(`listening on ${PORT}`)
-})
+function start(port){
+  app.listen(port, () => console.log(`listening on ${PORT}`))
+}
+
+module.exports = {
+  app: app,
+  start: start
+}
