@@ -29,10 +29,10 @@ describe('API Server', () => {
     expect(typeof response.body).toEqual('object');
   })
 
-  it('stamper middleware works', async () => {
-    const response = await request.get('/data');
-    expect(response.status).toEqual(200);
-    expect(response.body.time).toBeDefined();
-  })
+  // it('stamper middleware works', async () => {
+  //   const response = await request.get('/data');
+  //   expect(response.status).toEqual(200);
+  //   expect(response.body.time).toBeDefined();
+  // })
 
 });
