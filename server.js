@@ -1,42 +1,33 @@
-'use strict'
+'use strict';
 
-//libraries
-require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000; 
-
-//local files
-const notFoundHandler = require('./handlers/404')
-const errorHandler = require('./handlers/500') 
-
-//routes
-app.get('/', renderHome);
-app.get('/data', renderData);
-app.get('/bad', (req,res,next)=> {
-  // an time there is something inside the next(), it will throw an error
-  next('An error has occured');
+// first modularize the components
+const notFoundHandler = require('./handlers/404.js');
+const errorHandler = require('./handlers/500.js');
+app.get('/', (req, res) => {
+  res.status(200).send('Hello World')
 })
-app.use('*', notFoundHandler);
-
-//whenever someone throws an error, use the function errorHandler
-app.use(errorHandler);
-
-//callback functions
-function renderHome(req,res){
-  res.status(200).send('Hello!');
-}
-
-function renderData(req,res,next){
-  const outputObj ={
+app.get('/data', (req, res) => {
+  let outputObject = {
     10: "even",
     5: "odd",
-    "time": new Date()
+    "time": req.timestamp // we got this from the middleware
   }
-  res.status(200).json(outputObj)
+  res.status(200).json(outputObject);
+});
+app.get('/bad', (req, res, next) => {
+  next('you messsed up')
+});
+app.use('*', notFoundHandler);
+app.use(errorHandler);
+function start(port) {
+  app.listen(port, () => console.log(`Server up on port ${port}`))
 }
-
-//turning the server on
-app.listen(PORT, () => {
-  console.log(`listening on ${PORT}`)
-})
+// now we can export two things: app and start
+// start is used in index
+// app is used for testing
+module.exports = {
+  app: app,
+  start: start
+}
